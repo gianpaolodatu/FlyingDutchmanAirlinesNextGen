@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using FlyingDutchmanAirlines.RepositoryLayer;
 
 namespace FlyingDutchmanAirlines_Tests.RepositoryLayer
 {
@@ -8,8 +9,32 @@ namespace FlyingDutchmanAirlines_Tests.RepositoryLayer
         [TestMethod]
         public void CreateCostumer_Success()
         {
-            CustomerRepositoryTests repository = new CustomerRepositoryTests();
+            CustomerRepository repository = new CustomerRepository();
             Assert.IsNotNull(repository);
+
+            bool result = repository.CreateCustomer("Donald Knuth");
+
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void CreateCostumer_Failure_NameIsNull()
+        {
+            CustomerRepository repository = new();
+            Assert.IsNotNull(repository);
+
+            bool result = repository.CreateCustomer(null);
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void CreateCostumer_Failure_NameIsEmptyString()
+        {
+            CustomerRepository repository = new();
+            Assert.IsNotNull(repository);
+
+            bool result = repository.CreateCustomer("");
+            Assert.IsFalse(result);
         }
     }
 }
