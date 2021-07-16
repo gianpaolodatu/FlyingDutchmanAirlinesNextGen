@@ -10,11 +10,17 @@ namespace FlyingDutchmanAirlines.RepositoryLayer
     {
         public bool CreateCustomer(string name)
         {
-            if (string.IsNullOrEmpty(name))
+            if (IsInvalidCustomerName(name))
                 return false;
 
             return true;
 
+        }
+
+        private bool IsInvalidCustomerName(string name)
+        {
+            char[] forbiddenCharacters = { '!', '@', '#', '$', '%', '&', '*' };
+            return string.IsNullOrEmpty(name) || name.Any(nameChar => forbiddenCharacters.Contains(nameChar));
         }
     }
 }

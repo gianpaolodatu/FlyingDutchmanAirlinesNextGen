@@ -36,5 +36,22 @@ namespace FlyingDutchmanAirlines_Tests.RepositoryLayer
             bool result = repository.CreateCustomer("");
             Assert.IsFalse(result);
         }
+
+        [TestMethod]
+        [DataRow('!')]
+        [DataRow('@')]
+        [DataRow('#')]
+        [DataRow('$')]
+        [DataRow('%')]
+        [DataRow('&')]
+        [DataRow('*')]
+        public void CreateCostumer_Failure_NameContainsInvalidCharacters(char invalidCharacter)
+        {
+            CustomerRepository repository = new CustomerRepository();
+            Assert.IsNotNull(repository);
+
+            bool result = repository.CreateCustomer("Gianpaolo Datu" + invalidCharacter);
+            Assert.IsFalse(result);
+        }
     }
 }
