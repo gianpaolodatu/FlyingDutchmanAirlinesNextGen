@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FlyingDutchmanAirlines.DatabaseLayer;
+using FlyingDutchmanAirlines.DatabaseLayer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +10,31 @@ namespace FlyingDutchmanAirlines.RepositoryLayer
 {
     public class CustomerRepository
     {
-        public bool CreateCustomer(string name)
+        private readonly FlyingDutchmanAirlinesContext _context;
+
+        public CustomerRepository(FlyingDutchmanAirlinesContext _context)
+        {
+            this._context = _context;
+        }
+        public async Task<bool> CreateCustomerAsync(string name)
         {
             if (IsInvalidCustomerName(name))
                 return false;
+            Customer costumer = new Customer(name);
+            using (_context)
+            {
+                try
+                {
+                    _context.Customers.Add(costumer);
+                    await _context.SaveChangesAsync();
+                }
+                catch 
+                {
+                    return false;
+                }
+
+                
+            }
 
             return true;
 
