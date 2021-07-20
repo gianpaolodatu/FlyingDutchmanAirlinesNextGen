@@ -45,5 +45,10 @@ namespace FlyingDutchmanAirlines.RepositoryLayer
             char[] forbiddenCharacters = { '!', '@', '#', '$', '%', '&', '*' };
             return string.IsNullOrEmpty(name) || name.Any(nameChar => forbiddenCharacters.Contains(nameChar));
         }
+
+        public Customer GetCustomerByName(string name)
+        {
+            return new Customer(name);
+        }
     }
 }

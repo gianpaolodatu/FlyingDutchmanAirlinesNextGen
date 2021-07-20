@@ -3,17 +3,16 @@ using FlyingDutchmanAirlines.RepositoryLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.InMemory;
 using FlyingDutchmanAirlines.DatabaseLayer;
+using System.Threading.Tasks;
+
 namespace FlyingDutchmanAirlines_Tests.RepositoryLayer
 {
     [TestClass]
     public class CustomerRepositoryTests
     {
         private FlyingDutchmanAirlinesContext _context;
-
-        public CustomerRepositoryTests()
-        {
-
-        }
+        private CustomerRepository _repository;
+        
 
         [TestInitialize]
         public void TestInitialize()
@@ -23,36 +22,28 @@ namespace FlyingDutchmanAirlines_Tests.RepositoryLayer
                 .UseInMemoryDatabase("FlyingDutchman").Options;
 
             _context = new FlyingDutchmanAirlinesContext(dbContextOptions);
-
+            _repository = new CustomerRepository(_context);
+            Assert.IsNotNull(_repository);
         }
         [TestMethod]
-        public async void CreateCostumer_Success()
+        public async Task CreateCostumer_Success()
         {
-            CustomerRepository repository = new CustomerRepository(_context);
-            Assert.IsNotNull(repository);
-
-            bool result = await repository.CreateCustomerAsync("Donald Knuth");
+            bool result = await _repository.CreateCustomerAsync("Donald Knuth");
 
             Assert.IsTrue(result);
         }
 
         [TestMethod]
-        public async void CreateCostumer_Failure_NameIsNull()
+        public async Task CreateCostumer_Failure_NameIsNull()
         {
-            CustomerRepository repository = new(_context);
-            Assert.IsNotNull(repository);
-
-            bool result = await repository.CreateCustomerAsync(null);
+            bool result = await _repository.CreateCustomerAsync(null);
             Assert.IsFalse(result);
         }
 
         [TestMethod]
-        public async void CreateCostumer_Failure_NameIsEmptyString()
+        public async Task CreateCostumer_Failure_NameIsEmptyString()
         {
-            CustomerRepository repository = new(_context);
-            Assert.IsNotNull(repository);
-
-            bool result = await repository.CreateCustomerAsync("");
+            bool result = await _repository.CreateCustomerAsync("");
             Assert.IsFalse(result);
         }
 
@@ -64,13 +55,27 @@ namespace FlyingDutchmanAirlines_Tests.RepositoryLayer
         [DataRow('%')]
         [DataRow('&')]
         [DataRow('*')]
-        public async void CreateCostumer_Failure_NameContainsInvalidCharacters(char invalidCharacter)
+        public async Task CreateCostumer_Failure_NameContainsInvalidCharacters(char invalidCharacter)
         {
-            CustomerRepository repository = new CustomerRepository(_context);
+
+            bool result = await _repository.CreateCustomerAsync("Gianpaolo Datu" + invalidCharacter);
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public async Task CreateCostumer_Failure_DatabaseAccessError()
+        {
+            CustomerRepository repository = new CustomerRepository(null);
             Assert.IsNotNull(repository);
 
-            bool result = await repository.CreateCustomerAsync("Gianpaolo Datu" + invalidCharacter);
+            bool result = await repository.CreateCustomerAsync("Donald Duck");
             Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public async Task GetCustomerByName_Success()
+        {
+            Customer customer = _repository.GetCustomerByName("Linus Torvalds");
         }
     }
 }
