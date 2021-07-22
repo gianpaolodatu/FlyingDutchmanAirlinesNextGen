@@ -48,6 +48,10 @@ namespace FlyingDutchmanAirlines.RepositoryLayer
 
         public Customer GetCustomerByName(string name)
         {
+            if (IsInvalidCustomerName(name))
+            {
+
+            }
             return new Customer(name);
         }
     }

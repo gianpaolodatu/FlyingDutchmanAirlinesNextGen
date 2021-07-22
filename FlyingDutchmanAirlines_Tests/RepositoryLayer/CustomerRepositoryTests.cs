@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.InMemory;
 using FlyingDutchmanAirlines.DatabaseLayer;
 using System.Threading.Tasks;
+using FlyingDutchmanAirlines.DatabaseLayer.Models;
 
 namespace FlyingDutchmanAirlines_Tests.RepositoryLayer
 {
@@ -76,6 +77,7 @@ namespace FlyingDutchmanAirlines_Tests.RepositoryLayer
         public async Task GetCustomerByName_Success()
         {
             Customer customer = _repository.GetCustomerByName("Linus Torvalds");
+            Assert.IsNotNull(customer);
         }
     }
 }
