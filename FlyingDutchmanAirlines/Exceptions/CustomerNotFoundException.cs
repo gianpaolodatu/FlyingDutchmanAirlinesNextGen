@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FlyingDutchmanAirlines.Exceptions
 {
-    class CustomerNotFoundException
+    public class CustomerNotFoundException : Exception
     {
     }
 }

@@ -1,5 +1,6 @@
 ﻿using FlyingDutchmanAirlines.DatabaseLayer;
 using FlyingDutchmanAirlines.DatabaseLayer.Models;
+using FlyingDutchmanAirlines.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,9 +51,10 @@ namespace FlyingDutchmanAirlines.RepositoryLayer
         {
             if (IsInvalidCustomerName(name))
             {
-
+                throw new CustomerNotFoundException();
             }
-            return new Customer(name);
+            return _context.Customers.FirstOrDefault(c => c.Name == name)
+                ?? throw new CustomerNotFoundException();
         }
     }
 }
