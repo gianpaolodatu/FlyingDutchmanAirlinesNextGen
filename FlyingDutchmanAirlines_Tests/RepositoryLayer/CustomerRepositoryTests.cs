@@ -28,7 +28,7 @@ namespace FlyingDutchmanAirlines_Tests.RepositoryLayer
             _repository = new CustomerRepository(_context);
             Assert.IsNotNull(_repository);
 
-            Customer testCostumer = new Customer("Tsu Matre");
+            Customer testCostumer = new Customer("Gianpaolo Datu");
             _context.Customers.Add(testCostumer);
             await _context.SaveChangesAsync();
         }
@@ -82,8 +82,13 @@ namespace FlyingDutchmanAirlines_Tests.RepositoryLayer
         [TestMethod]
         public async Task GetCustomerByName_Success()
         {
-            Customer customer = _repository.GetCustomerByName("Tsu Matre");
+            Customer customer = _repository.GetCustomerByName("Gianpaolo Datu");
             Assert.IsNotNull(customer);
+
+            Customer dbCustomer = await _context.Customers.FirstAsync();
+
+            bool customersAreEqual = Customer.Equals(customer, dbCustomer);
+            Assert.IsTrue(customersAreEqual);
         }
 
         [TestMethod]
@@ -95,7 +100,7 @@ namespace FlyingDutchmanAirlines_Tests.RepositoryLayer
         [DataRow("&")]
         [DataRow("*")]
         [ExpectedException(typeof(CustomerNotFoundException))]
-        public async Task GetCustomerByName_Failer_InvalidName(string name)
+        public async Task GetCustomerByName_Failure_InvalidName(string name)
         {
              _repository.GetCustomerByName(name);
         }

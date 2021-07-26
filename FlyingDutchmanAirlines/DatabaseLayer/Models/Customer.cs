@@ -12,10 +12,16 @@ namespace FlyingDutchmanAirlines.DatabaseLayer.Models
             Name = name;
             Bookings = new HashSet<Booking>();
         }
-
+        
         public int CustomerId { get; set; }
         public string Name { get; }
 
         public ICollection<Booking> Bookings { get; set; }
+
+        public static bool Equals(Customer x, Customer y)
+        {
+            return x.CustomerId == y.CustomerId
+                    && x.Name == y.Name;
+        }
     }
 }
